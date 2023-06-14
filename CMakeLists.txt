@@ -12,3 +12,4 @@ add_subdirectory(deps/webgpu)
 add_subdirectory(common)
 
 add_subdirectory(hello-instance)
+add_subdirectory(render-loop)
