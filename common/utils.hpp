@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
+#include <glm/glm.hpp>
 #include <webgpu/webgpu.h>
 
 namespace util {
@@ -27,6 +28,12 @@ protected:
 
   WGPUSurface GetSurface() const { return m_surface; }
 
+  WGPUDevice GetDevice() const { return m_device; }
+
+  WGPUQueue GetQueue() const { return m_queue; }
+
+  WGPUSwapChain GetSwapChain() const { return m_swapchain; }
+
 private:
   void Init();
 
@@ -46,6 +53,9 @@ private:
   WGPUInstance m_ins = nullptr;
   WGPUSurface m_surface = nullptr;
   WGPUAdapter m_adapter = nullptr;
+  WGPUDevice m_device = nullptr;
+  WGPUQueue m_queue = nullptr;
+  WGPUSwapChain m_swapchain = nullptr;
 };
 
 } // namespace util

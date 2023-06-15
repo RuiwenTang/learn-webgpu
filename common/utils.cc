@@ -48,6 +48,25 @@ void App::Init() {
     wgpuInstanceRequestAdapter(m_ins, &opts, &RequestAdapterCallback, this);
   }
 
+  // device
+  {
+    WGPUDeviceDescriptor desc{};
+    m_device = wgpuAdapterCreateDevice(m_adapter, &desc);
+  }
+  // queue
+  m_queue = wgpuDeviceGetQueue(m_device);
+  // swapchain
+  {
+    WGPUSwapChainDescriptor desc = {};
+    desc.usage = WGPUTextureUsage_RenderAttachment;
+    desc.format = WGPUTextureFormat_BGRA8Unorm;
+    desc.width = m_width;
+    desc.height = m_height;
+    desc.presentMode = WGPUPresentMode_Mailbox;
+
+    m_swapchain = wgpuDeviceCreateSwapChain(m_device, m_surface, &desc);
+  }
+
   OnInit();
 }
 
