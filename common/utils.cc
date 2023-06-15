@@ -1,5 +1,7 @@
 
 #include "utils.hpp"
+#include <fstream>
+#include <spdlog/spdlog.h>
 
 namespace util {
 
@@ -15,6 +17,17 @@ void App::Run() {
   Loop();
 
   Terminal();
+}
+
+std::string App::ReadFile(std::string path) {
+  std::ifstream file(path);
+  if (!file.is_open()) {
+    // handle error
+    return "";
+  }
+  std::string content((std::istreambuf_iterator<char>(file)),
+                      (std::istreambuf_iterator<char>()));
+  return content;
 }
 
 void App::Init() {
@@ -45,13 +58,24 @@ void App::Init() {
     opts.powerPreference = WGPUPowerPreference_Undefined;
     opts.forceFallbackAdapter = false;
 
+    // In general the options need to consider some advance constraints such as
+    // powerPerfermance and some prefered backends
+    // But most often, no matter in PC or mobile, there is only one GPU can use.
+    // So choos what adapter we meet in first.
     wgpuInstanceRequestAdapter(m_ins, &opts, &RequestAdapterCallback, this);
   }
 
   // device
   {
     WGPUDeviceDescriptor desc{};
+    // the device is sampe, most often there is only one GPU
     m_device = wgpuAdapterCreateDevice(m_adapter, &desc);
+
+    wgpuDeviceSetLoggingCallback(m_device, &DeviceLogCallback, nullptr);
+    wgpuDeviceSetUncapturedErrorCallback(m_device, &DeviceErrorCallback,
+                                         nullptr);
+
+    wgpuDevicePushErrorScope(m_device, WGPUErrorFilter_Validation);
   }
   // queue
   m_queue = wgpuDeviceGetQueue(m_device);
@@ -101,6 +125,29 @@ void App::RequestAdapterCallback(WGPURequestAdapterStatus status,
   auto app = reinterpret_cast<App *>(userdata);
 
   app->m_adapter = adapter;
+}
+
+void App::DeviceLogCallback(WGPULoggingType type, char const *message,
+                            void *userdata) {
+  switch (type) {
+  case WGPULoggingType_Error:
+    spdlog::error("[ {} ]", message);
+    break;
+  case WGPULoggingType_Warning:
+    spdlog::warn("[ {} ]", message);
+    break;
+  case WGPULoggingType_Info:
+    spdlog::info("[ {} ]", message);
+    break;
+  default:
+    spdlog::info("[ {} ]", message);
+    break;
+  }
+}
+
+void App::DeviceErrorCallback(WGPUErrorType type, char const *message,
+                              void *userdata) {
+  DeviceLogCallback(WGPULoggingType_Error, message, nullptr);
 }
 
 } // namespace util

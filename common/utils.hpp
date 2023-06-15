@@ -15,6 +15,8 @@ public:
 
   void Run();
 
+  static std::string ReadFile(std::string path);
+
 protected:
   virtual void OnInit() = 0;
 
@@ -44,6 +46,12 @@ private:
   static void RequestAdapterCallback(WGPURequestAdapterStatus status,
                                      WGPUAdapter adapter, char const *message,
                                      void *userdata);
+
+  static void DeviceLogCallback(WGPULoggingType type, char const *message,
+                                void *userdata);
+
+  static void DeviceErrorCallback(WGPUErrorType type, char const *message,
+                                  void *userdata);
 
 private:
   std::string m_title;

@@ -13,3 +13,4 @@ add_subdirectory(common)
 
 add_subdirectory(hello-instance)
 add_subdirectory(render-loop)
+add_subdirectory(render-pipeline)
