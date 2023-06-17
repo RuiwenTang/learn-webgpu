@@ -11,6 +11,10 @@ add_library(util
 
 if(APPLE)
   target_sources(util PUBLIC ${CMAKE_CURRENT_LIST_DIR}/util_platform_darwin.mm)
+elseif(WIN32)
+  # TODO
+else()
+  target_sources(util PUBLIC ${CMAKE_CURRENT_LIST_DIR}/util_platform_linux.cc)
 endif()
 
 target_include_directories(util PUBLIC ${CMAKE_CURRENT_LIST_DIR})
