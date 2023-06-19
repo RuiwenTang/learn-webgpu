@@ -10,7 +10,7 @@
 
 class UniformBuffer : public util::App {
 public:
-  UniformBuffer() : util::App("Uniform Buffer", 800, 800) {}
+  UniformBuffer() : util::App("MSAA Resolve", 800, 800) {}
 
   ~UniformBuffer() override = default;
 
