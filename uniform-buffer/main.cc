@@ -2,10 +2,10 @@
 #include "utils.hpp"
 
 #include <array>
-#include <vector>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <vector>
 #include <webgpu/webgpu.h>
 
 class UniformBuffer : public util::App {
@@ -90,7 +90,7 @@ protected:
     {
       WGPUShaderModuleWGSLDescriptor wgsl_desc{};
       wgsl_desc.chain.sType = WGPUSType_ShaderModuleWGSLDescriptor;
-      wgsl_desc.source = raw_shader.c_str();
+      wgsl_desc.code = raw_shader.c_str();
 
       WGPUShaderModuleDescriptor desc{};
       desc.label = "uniform buffer shader";

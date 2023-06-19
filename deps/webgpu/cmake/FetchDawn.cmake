@@ -1,5 +1,5 @@
 # Prevent multiple includes
-if (TARGET dawn_native)
+if(TARGET dawn_native)
 	return()
 endif()
 
@@ -7,20 +7,22 @@ include(FetchContent)
 
 FetchContent_Declare(
 	dawn
-	#GIT_REPOSITORY https://dawn.googlesource.com/dawn
-	#GIT_TAG        chromium/5715
-	#GIT_SHALLOW ON
+
+	# GIT_REPOSITORY https://dawn.googlesource.com/dawn
+	# GIT_TAG        chromium/5715
+	# GIT_SHALLOW ON
 
 	# Manual download mode, even shallower than GIT_SHALLOW ON
 	DOWNLOAD_COMMAND
-		cd ${FETCHCONTENT_BASE_DIR}/dawn-src &&
-		git init &&
-		git pull --depth=1 https://dawn.googlesource.com/dawn chromium/5715 &&
-		git reset --hard FETCH_HEAD
+	cd ${FETCHCONTENT_BASE_DIR}/dawn-src &&
+	git init &&
+	git pull --depth=1 https://dawn.googlesource.com/dawn main &&
+	git reset --hard FETCH_HEAD
 )
 
 FetchContent_GetProperties(dawn)
-if (NOT dawn_POPULATED)
+
+if(NOT dawn_POPULATED)
 	FetchContent_Populate(dawn)
 
 	find_package(PythonInterp 3 REQUIRED)
@@ -32,13 +34,14 @@ if (NOT dawn_POPULATED)
 	)
 
 	# A more minimalistic choice of backand than Dawn's default
-	if (APPLE)
+	if(APPLE)
 		set(USE_VULKAN OFF)
 		set(USE_METAL ON)
 	else()
 		set(USE_VULKAN ON)
 		set(USE_METAL OFF)
 	endif()
+
 	set(DAWN_ENABLE_D3D11 OFF)
 	set(DAWN_ENABLE_D3D12 OFF)
 	set(DAWN_ENABLE_METAL ${USE_METAL})
@@ -64,7 +67,7 @@ if (NOT dawn_POPULATED)
 	set(TINT_BUILD_REMOTE_COMPILE OFF)
 
 	add_subdirectory(${dawn_SOURCE_DIR} ${dawn_BINARY_DIR})
-endif ()
+endif()
 
 set(AllDawnTargets
 	core_tables
@@ -96,14 +99,14 @@ set(AllGlfwTargets
 	update_mappings
 )
 
-foreach (Target ${AllDawnTargets})
-	if (TARGET ${Target})
+foreach(Target ${AllDawnTargets})
+	if(TARGET ${Target})
 		set_property(TARGET ${Target} PROPERTY FOLDER "External/Dawn")
 	endif()
 endforeach()
 
-foreach (Target ${AllGlfwTargets})
-	if (TARGET ${Target})
+foreach(Target ${AllGlfwTargets})
+	if(TARGET ${Target})
 		set_property(TARGET ${Target} PROPERTY FOLDER "External/GLFW3")
 	endif()
 endforeach()
