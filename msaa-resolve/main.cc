@@ -8,11 +8,11 @@
 #include <vector>
 #include <webgpu/webgpu.h>
 
-class UniformBuffer : public util::App {
+class MSAAResolve : public util::App {
 public:
-  UniformBuffer() : util::App("MSAA Resolve", 800, 800) {}
+  MSAAResolve() : util::App("MSAA Resolve", 800, 800) {}
 
-  ~UniformBuffer() override = default;
+  ~MSAAResolve() override = default;
 
 protected:
   void OnInit() override {
@@ -280,7 +280,7 @@ private:
 };
 
 int main(int argc, const char **argv) {
-  UniformBuffer app{};
+  MSAAResolve app{};
 
   app.Run();
 
